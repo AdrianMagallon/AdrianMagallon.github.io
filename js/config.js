@@ -3,7 +3,7 @@
 
 const CONFIG = {
   // Your GitHub username (required)
-  githubUsername: "your-username",
+  githubUsername: "AdrianMagallon",
 
   // Leave empty to auto-pull ALL your public repos.
   // Or list specific repo names to hand-pick what shows up, e.g. ["repo-one", "repo-two"]
