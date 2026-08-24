@@ -1,17 +1,55 @@
 // Small wrapper around the unauthenticated GitHub REST API.
 // Unauthenticated requests are capped at 60/hr per IP — plenty for a portfolio site,
 // but if you ever hit the limit, results just won't load until it resets.
+//
+// To keep well under that limit (and make repeat visits instant), responses are
+// cached in localStorage for a few minutes. Bump CACHE_TTL_MS if you edit repos
+// often and want fresher data sooner.
 
 const GH_API = "https://api.github.com";
+const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
+const CACHE_PREFIX = "gh-cache:";
+
+function readCache(key) {
+  try {
+    const raw = localStorage.getItem(CACHE_PREFIX + key);
+    if (!raw) return undefined;
+    const { data, expires } = JSON.parse(raw);
+    if (Date.now() > expires) {
+      localStorage.removeItem(CACHE_PREFIX + key);
+      return undefined;
+    }
+    return data;
+  } catch (e) {
+    // Private browsing / storage disabled / corrupt entry — just skip the cache.
+    return undefined;
+  }
+}
+
+function writeCache(key, data) {
+  try {
+    localStorage.setItem(
+      CACHE_PREFIX + key,
+      JSON.stringify({ data, expires: Date.now() + CACHE_TTL_MS })
+    );
+  } catch (e) {
+    // Storage full or unavailable — not worth failing the request over.
+  }
+}
 
 async function ghFetch(path) {
+  const cached = readCache(path);
+  if (cached !== undefined) return cached;
+
   const res = await fetch(`${GH_API}${path}`, {
     headers: { Accept: "application/vnd.github+json" }
   });
   if (!res.ok) {
     throw new Error(`GitHub API error ${res.status} for ${path}`);
   }
-  return res.json();
+  const data = await res.json();
+  writeCache(path, data);
+  return data;
 }
 
 async function fetchRepos(username, allowlist, blocklist) {
