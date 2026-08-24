@@ -17,8 +17,8 @@ const CONFIG = {
   ownerName: "Your Name",
   // Optional links shown in the footer
   links: {
-    github: "https://github.com/your-username",
-    linkedin: "",
-    email: ""
+    github: "https://github.com/AdrianMagallon",
+    linkedin: "www.linkedin.com/in/adrian-magallon",
+    email: "adrian.magallon101@gmail.com"
   }
 };
