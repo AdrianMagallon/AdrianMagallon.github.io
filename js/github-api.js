@@ -38,19 +38,29 @@ async function fetchRepos(username, allowlist, blocklist) {
 }
 
 async function fetchRepoDetail(username, repoName) {
-  const repo = await ghFetch(`/repos/${username}/${repoName}`);
-  const [languages, contents] = await Promise.all([
+  // Fire everything at once instead of waiting on repo -> then languages/contents -> then readme.
+  // That was three round trips stacked in sequence; this way it's just the slowest of the four.
+  const [repo, languages, contents, readmeResult] = await Promise.all([
+    ghFetch(`/repos/${username}/${repoName}`),
     ghFetch(`/repos/${username}/${repoName}/languages`).catch(() => ({})),
-    ghFetch(`/repos/${username}/${repoName}/contents`).catch(() => [])
+    ghFetch(`/repos/${username}/${repoName}/contents`).catch(() => []),
+    ghFetch(`/repos/${username}/${repoName}/readme`).catch(() => null)
   ]);
+
   let readme = null;
-  try {
-    const readmeMeta = await ghFetch(`/repos/${username}/${repoName}/readme`);
-    const decoded = atob(readmeMeta.content.replace(/\n/g, ""));
-    readme = decoded;
-  } catch (e) {
-    readme = null;
+  if (readmeResult && readmeResult.content) {
+    try {
+      readme = decodeURIComponent(
+        atob(readmeResult.content.replace(/\n/g, ""))
+          .split("")
+          .map((c) => "%" + c.charCodeAt(0).toString(16).padStart(2, "0"))
+          .join("")
+      );
+    } catch (e) {
+      readme = atob(readmeResult.content.replace(/\n/g, ""));
+    }
   }
+
   return { repo, languages, contents, readme };
 }
 
