@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Spec Sheet</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="back-link" href="index.html">← Back to catalog</a>
+  </header>
+
+  <main class="spec-sheet" id="sheet-root">
+    <p class="state-msg">Loading…</p>
+  </main>
+
+  <footer id="site-footer"></footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/github-api.js"></script>
+  <script src="js/detail.js"></script>
+  <script>
+    const footerLinks = [];
+    if (CONFIG.links.github) footerLinks.push(`<a href="${CONFIG.links.github}">GitHub</a>`);
+    if (CONFIG.links.linkedin) footerLinks.push(`<a href="${CONFIG.links.linkedin}">LinkedIn</a>`);
+    if (CONFIG.links.email) footerLinks.push(`<a href="mailto:${CONFIG.links.email}">Email</a>`);
+    document.getElementById("site-footer").innerHTML =
+      `<span>© ${new Date().getFullYear()} ${CONFIG.ownerName}</span>` + footerLinks.join("");
+  </script>
+</body>
+</html>
