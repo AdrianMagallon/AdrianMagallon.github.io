@@ -14,7 +14,7 @@ const CONFIG = {
   
   siteTitle: "Project Catalog",
   siteTagline: "A running inventory of things I've built.",
-  ownerName: "Your Name",
+  ownerName: "Adrian Magallon",
   // Optional links shown in the footer
   links: {
     github: "https://github.com/AdrianMagallon",
