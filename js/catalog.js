@@ -1,6 +1,6 @@
 async function renderCatalog() {
   const grid = document.getElementById("catalog-grid");
-  grid.innerHTML = `<p class="state-msg">Loading catalog from GitHub…</p>`;
+  grid.innerHTML = `<p class="state-msg">Loading portfolio from GitHub…</p>`;
 
   try {
     const repos = await fetchRepos(
