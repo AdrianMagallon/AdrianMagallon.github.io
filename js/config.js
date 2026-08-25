@@ -12,7 +12,7 @@ const CONFIG = {
   // Repos to hide even if repoAllowlist is empty (e.g. your username/username config repo)
   repoBlocklist: ["AdrianMagallon", "AdrianMagallon.github.io"],
   
-  siteTitle: "Project Catalog",
+  siteTitle: "Project Portfolio",
   siteTagline: "A running inventory of things I've built.",
   ownerName: "Adrian Magallon",
   // Optional links shown in the footer
