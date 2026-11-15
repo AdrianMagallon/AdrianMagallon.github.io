@@ -66,26 +66,27 @@
         <a class="btn" href="https://codenext.withgoogle.com/" target="_blank" rel="noopener">Live demo</a>
       </div>
 
-      <div class="readme"><div id="readme" class="md" data-path="README.md"><article class="markdown-body entry-content container-lg" itemprop="text"><h2>WiFi Robot Car</h2>
-<p>A browser-controlled robot car built on an ESP32. It creates its own WiFi access point, hosts a little web interface, and lets you drive it around using an on-screen directional pad — no internet connection required.</p>
-<h2>Background</h2>
-<p>This was built as part of the <strong>Google Code Next</strong> program, which introduced me to robotics for the first time. Going in, I had basically no experience with robotics and not much with C++ either. It was a lot to take in at first — figuring out hardware, motor control, and a new language all at once was pretty overwhelming. But over the course of the program it started clicking, and by the end I was a lot more comfortable with C++ than I expected to be. This project is the result of that whole journey, and it&#39;s something I&#39;m genuinely proud of.</p>
-<h2>How It Works</h2>
-<p>When the ESP32 boots up, it spins up a WiFi access point (default SSID: <code>robot</code>, password: <code>12345678</code>) and starts a basic HTTP server on port 80. You connect your phone or laptop to that network, open a browser, and navigate to the ESP32&#39;s IP address (printed to Serial on startup — usually <code>192.168.4.1</code>).</p>
-<p>The web page shows a 3x3 grid of direction buttons: forward, backward, left, right, and four diagonals, plus a stop button in the middle. Pressing a button sends an HTTP POST request to a matching endpoint (like <code>/forward</code> or <code>/leftBackward</code>). The ESP32 reads that request and calls <code>drive()</code>, a throttle/steering mixer that computes matching left/right motor speeds — see <code>MotorControl.cpp</code>.</p>
-<h2>Hardware</h2>
-<p>The build uses an ESP32 development board, 2 TT gear DC motors (the yellow ones, one per driven wheel — left and right), an L298N H-bridge motor driver, an LM2596 buck converter (steps the battery voltage down to 3.3V for the ESP32), a battery pack (the original single 9V battery is fine for 2 motors), and a front-mounted ball caster in place of a third and fourth wheel — it&#39;s a passive wheel with no motor, so it just bolts on and needs no wiring. The firmware also supports an optional 4WD layout (no caster, four driven motors) if you&#39;d rather build that instead; see MOTORS_PER_SIDE below.</p>
-<h3>Wiring</h3>
-<p>The battery splits two ways: straight into the L298N board(s) to drive the motors, and into the buck converter which steps it down to 3.3V for the ESP32.</p>
-<p><code>MotorControl.h</code> defines <code>MOTORS_PER_SIDE</code>, set to <code>1</code> for this two-wheel-drive-plus-caster build (one motor per side), and <code>MotorControl.cpp</code> lists the actual pin numbers for every motor. The single-L298N wiring is:</p>
-<table>
+      <div class="readme"><div id="readme" class="md" data-path="README.md"><article class="markdown-body entry-content container-lg" itemprop="text"><div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">WiFi Robot Car</h2></div>
+<p dir="auto">A browser-controlled robot car built on an ESP32. It creates its own WiFi access point, hosts a little web interface, and lets you drive it around using an on-screen directional pad — no internet connection required.</p>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Background</h2></div>
+<p dir="auto">This was built as part of the <strong>Google Code Next</strong> program, which introduced me to robotics for the first time. Going in, I had basically no experience with robotics and not much with C++ either. It was a lot to take in at first — figuring out hardware, motor control, and a new language all at once was pretty overwhelming. But over the course of the program it started clicking, and by the end I was a lot more comfortable with C++ than I expected to be. This project is the result of that whole journey, and it's something I'm genuinely proud of.</p>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">How It Works</h2></div>
+<p dir="auto">When the ESP32 boots up, it spins up a WiFi access point (default SSID: <code>robot</code>, password: <code>12345678</code>) and starts a basic HTTP server on port 80. You connect your phone or laptop to that network, open a browser, and navigate to the ESP32's IP address (printed to Serial on startup — usually <code>192.168.4.1</code>).</p>
+<p dir="auto">The web page shows a 3x3 grid of direction buttons: forward, backward, left, right, and four diagonals, plus a stop button in the middle. Pressing a button sends an HTTP POST request to a matching endpoint (like <code>/forward</code> or <code>/leftBackward</code>). The ESP32 reads that request and calls <code>drive()</code>, a throttle/steering mixer that computes matching left/right motor speeds — see <code>MotorControl.cpp</code>.</p>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Hardware</h2></div>
+<p dir="auto">The build uses an ESP32 development board, 2 TT gear DC motors (the yellow ones, one per driven wheel — left and right), an L298N H-bridge motor driver, an LM2596 buck converter (steps the battery voltage down to 3.3V for the ESP32), a battery pack (the original single 9V battery is fine for 2 motors), and a front-mounted ball caster in place of a third and fourth wheel — it's a passive wheel with no motor, so it just bolts on and needs no wiring. The firmware also supports an optional 4WD layout (no caster, four driven motors) if you'd rather build that instead; see MOTORS_PER_SIDE below.</p>
+<div class="markdown-heading" dir="auto"><h3 class="heading-element" dir="auto">Wiring</h3></div>
+<p dir="auto">The battery splits two ways: straight into the L298N board(s) to drive the motors, and into the buck converter which steps it down to 3.3V for the ESP32.</p>
+<p dir="auto"><code>MotorControl.h</code> defines <code>MOTORS_PER_SIDE</code>, set to <code>1</code> for this two-wheel-drive-plus-caster build (one motor per side), and <code>MotorControl.cpp</code> lists the actual pin numbers for every motor. The single-L298N wiring is:</p>
+<markdown-accessiblity-table><table>
 <thead>
 <tr>
 <th>L298N Signal</th>
 <th>ESP32 Pin</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>ENA (PWM)</td>
 <td>12</td>
 </tr>
@@ -109,29 +110,33 @@
 <td>ENB (PWM)</td>
 <td>33</td>
 </tr>
-</tbody></table>
-<p>The ball caster needs no wiring at all — it&#39;s a passive wheel with no motor, so it just bolts onto the front of the chassis. Mount it roughly matched to the driven wheel height so the chassis sits level, and centered under the battery pack&#39;s weight for stability. If you&#39;d rather build the optional 4WD layout instead, set <code>MOTORS_PER_SIDE</code> to <code>2</code> and wire a second L298N to the rear-motor pins in <code>MotorControl.cpp</code> (update the placeholder pins there to match your wiring). Avoid GPIO12 if you run into boot problems, since it&#39;s one of the ESP32&#39;s boot &quot;strapping&quot; pins.</p>
-<p>Motor speed is set to 225/255 by default. Diagonal movements slow down one side to produce a turning arc; <code>drive()</code> handles the actual mixing so this works the same whether a side has one motor or two.</p>
-<h2>Schematic</h2>
-<p>A full KiCad schematic for the wiring described above is included in this repo under <a href="https://github.com/AdrianMagallon/ESP-Rover/blob/main/Hardware"><code>Hardware/</code></a>, along with an exported <a href="https://github.com/AdrianMagallon/ESP-Rover/blob/main/Hardware/Schematic.pdf"><code>Schematic.pdf</code></a> for quick viewing without needing KiCad installed. Open the <code>.kicad_pro</code> file in KiCad if you want to view or edit the schematic directly.</p>
-<h2>File Structure</h2>
-<pre><code>Robot-main.ino # Main sketch — WiFi setup, HTTP server loop, request routing
+</tbody>
+</table></markdown-accessiblity-table>
+<p dir="auto">The ball caster needs no wiring at all — it's a passive wheel with no motor, so it just bolts onto the front of the chassis. Mount it roughly matched to the driven wheel height so the chassis sits level, and centered under the battery pack's weight for stability. If you'd rather build the optional 4WD layout instead, set <code>MOTORS_PER_SIDE</code> to <code>2</code> and wire a second L298N to the rear-motor pins in <code>MotorControl.cpp</code> (update the placeholder pins there to match your wiring). Avoid GPIO12 if you run into boot problems, since it's one of the ESP32's boot "strapping" pins.</p>
+<p dir="auto">Motor speed is set to 225/255 by default. Diagonal movements slow down one side to produce a turning arc; <code>drive()</code> handles the actual mixing so this works the same whether a side has one motor or two.</p>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Schematic</h2></div>
+<p dir="auto">A full KiCad schematic for the wiring described above is included in this repo under <a href="https://github.com/AdrianMagallon/ESP-Rover/blob/main/Hardware"><code>Hardware/</code></a>, along with an exported <a href="https://github.com/AdrianMagallon/ESP-Rover/blob/main/Hardware/Schematic.pdf"><code>Schematic.pdf</code></a> for quick viewing without needing KiCad installed. Open the <code>.kicad_pro</code> file in KiCad if you want to view or edit the schematic directly.</p>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">File Structure</h2></div>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto" data-snippet-clipboard-copy-content="Robot-main.ino # Main sketch — WiFi setup, HTTP server loop, request routing
+MotorControl.cpp/h # Motor pin setup, the drive() throttle/steering mixer, and movement functions
+WiFiSetup.cpp/h # Starts the ESP32 as a WiFi access point (SoftAP)
+HtmlResponse.cpp/h # Serves the control UI as an HTTP response"><pre class="notranslate"><code>Robot-main.ino # Main sketch — WiFi setup, HTTP server loop, request routing
 MotorControl.cpp/h # Motor pin setup, the drive() throttle/steering mixer, and movement functions
 WiFiSetup.cpp/h # Starts the ESP32 as a WiFi access point (SoftAP)
 HtmlResponse.cpp/h # Serves the control UI as an HTTP response
-</code></pre>
-<h2>Setup &amp; Flashing</h2>
-<p>Open the project in the Arduino IDE (or PlatformIO) and make sure the ESP32 board package is installed. If you want, change the WiFi credentials at the top of <code>Robot-main.ino</code>:</p>
-<pre><code class="language-cpp">const char *ssid = &quot;robot&quot;;
-const char *password = &quot;12345678&quot;;
-</code></pre>
-<p>Then select your ESP32 board and the correct COM port, flash it, and open Serial Monitor at <strong>115200 baud</strong> to see the AP IP address after boot.</p>
-<h2>Connecting &amp; Driving</h2>
-<p>Connect your device to the <code>robot</code> WiFi network, then open a browser and go to <code>http://192.168.4.1</code> (confirm the IP in Serial Monitor if it&#39;s different). The control pad should load immediately, and it works on mobile too since the buttons respond to touch events.</p>
-<h2>Known Issues / Things to Fix</h2>
-<p>Touch release now correctly sends <code>/stop</code>. An earlier bug had it calling <code>toggleCheckbox(&#39;stop&#39;)</code>, a function that was never defined, so lifting your finger did nothing on mobile; that&#39;s been fixed.</p>
-<p>The WiFi credentials are hardcoded, so definitely change the password before using this around other people.</p>
-<p>The HTTP server handles one client at a time and closes the connection after each request, so there&#39;s a small delay between commands. Holding a direction button now sends continuous input: the browser resends that command every 150ms for as long as the button stays pressed, and releasing it sends <code>/stop</code> — see the script in <code>HtmlResponse.cpp</code>.</p>
+</code></pre></div>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Setup &amp; Flashing</h2></div>
+<p dir="auto">Open the project in the Arduino IDE (or PlatformIO) and make sure the ESP32 board package is installed. If you want, change the WiFi credentials at the top of <code>Robot-main.ino</code>:</p>
+<div class="highlight highlight-source-c++ notranslate position-relative overflow-auto" dir="auto" data-snippet-clipboard-copy-content="const char *ssid = &quot;robot&quot;;
+const char *password = &quot;12345678&quot;;"><pre><span class="pl-k">const</span> <span class="pl-k">char</span> *ssid = <span class="pl-s"><span class="pl-pds">"</span>robot<span class="pl-pds">"</span></span>;
+<span class="pl-k">const</span> <span class="pl-k">char</span> *password = <span class="pl-s"><span class="pl-pds">"</span>12345678<span class="pl-pds">"</span></span>;</pre></div>
+<p dir="auto">Then select your ESP32 board and the correct COM port, flash it, and open Serial Monitor at <strong>115200 baud</strong> to see the AP IP address after boot.</p>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Connecting &amp; Driving</h2></div>
+<p dir="auto">Connect your device to the <code>robot</code> WiFi network, then open a browser and go to <code>http://192.168.4.1</code> (confirm the IP in Serial Monitor if it's different). The control pad should load immediately, and it works on mobile too since the buttons respond to touch events.</p>
+<div class="markdown-heading" dir="auto"><h2 class="heading-element" dir="auto">Known Issues / Things to Fix</h2></div>
+<p dir="auto">Touch release now correctly sends <code>/stop</code>. An earlier bug had it calling <code>toggleCheckbox('stop')</code>, a function that was never defined, so lifting your finger did nothing on mobile; that's been fixed.</p>
+<p dir="auto">The WiFi credentials are hardcoded, so definitely change the password before using this around other people.</p>
+<p dir="auto">The HTTP server handles one client at a time and closes the connection after each request, so there's a small delay between commands. Holding a direction button now sends continuous input: the browser resends that command every 150ms for as long as the button stays pressed, and releasing it sends <code>/stop</code> — see the script in <code>HtmlResponse.cpp</code>.</p>
 </article></div></div>
 
       <div class="manifest">
