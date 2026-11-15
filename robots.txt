@@ -2,6 +2,9 @@
 User-agent: *
 Allow: /
 
+# Where search engines can find the list of every page on the site.
+Sitemap: https://adrianmagallon.com/sitemap.xml
+
 # AI training / scraping crawlers — blocked.
 # (Voluntary — see note below.)
 

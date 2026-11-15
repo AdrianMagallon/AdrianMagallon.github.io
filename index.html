@@ -3,44 +3,93 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Project Portfolio</title>
-  <meta name="description" content="A running inventory of things Adrian Magallon has built — hardware and software projects pulled live from GitHub." />
-  <meta property="og:title" content="Project Portfolio" />
-  <meta property="og:description" content="A running inventory of things Adrian Magallon has built." />
+  <title>Adrian Magallon | Electrical Engineering Projects</title>
+  <meta name="description" content="Adrian Magallon is an electrical engineering student who builds embedded hardware and firmware projects. This is the running inventory of what he has made, with details and source code for each." />
+  <link rel="canonical" href="https://adrianmagallon.com/" />
+  <meta property="og:title" content="Adrian Magallon | Electrical Engineering Projects" />
+  <meta property="og:description" content="Embedded hardware and firmware projects by Adrian Magallon, with details and source code for each." />
   <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://adrianmagallon.com/" />
+  <meta property="og:site_name" content="Adrian Magallon" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230e1a2b'/%3E%3Ctext x='50' y='65' font-size='38' font-family='monospace' font-weight='bold' fill='%23e8a33d' text-anchor='middle'%3EAM%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
+  <!-- Tells search engines who this site belongs to and which profiles
+       are the same person. Keep the links in step with js/config.js. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Adrian Magallon",
+    "url": "https://adrianmagallon.com/",
+    "sameAs": [
+      "https://github.com/AdrianMagallon",
+      "https://www.linkedin.com/in/adrian-magallon"
+    ]
+  }
+  </script>
 </head>
 <body>
+  <!-- The text in this header is what search engines read first, so it's
+       written straight into the page rather than filled in by JavaScript.
+       Edit it here. -->
   <header class="site-header">
-    <p class="eyebrow">— Inventory —</p>
-    <h1 id="page-title">Project Portfolio</h1>
-    <p id="page-tagline">A running inventory of things I've built.</p>
+    <p class="eyebrow">— Project Portfolio —</p>
+    <h1>Adrian Magallon</h1>
+    <p>I'm an electrical engineering student at Chabot College. I build embedded hardware and firmware projects: ESP32 boards, cameras, robots, and the schematics that go with them.</p>
+    <p>This is a running inventory of things I've built. Each entry opens a spec sheet with the details, the files, and the source code.</p>
   </header>
 
+  <!-- The cards between the two BUILD markers are written by
+       scripts/build.mjs, so the project list is part of the page itself.
+       Don't edit them by hand: the next build replaces them. -->
   <main class="catalog" id="catalog-grid">
-    <p class="state-msg">Loading…</p>
+    <!-- BUILD:projects:start -->
+    <a class="card" href="projects/ESP-CAM/" data-repo="ESP-CAM">
+      <div class="card-top">
+        <span class="card-num mono">PN-001</span>
+        <span class="stamp">Active</span>
+      </div>
+      <h2>ESP-CAM</h2>
+      <p class="desc">A handheld camera featuring a touch screen and an esp32.</p>
+      <div class="tags">
+        <span class="tag">C++</span>
+      </div>
+      <div class="card-foot">
+        <span>Updated Nov 15, 2026</span>
+        <span>View spec →</span>
+      </div>
+    </a>
+    <a class="card" href="projects/ESP-Rover/" data-repo="ESP-Rover">
+      <div class="card-top">
+        <span class="card-num mono">PN-002</span>
+        <span class="stamp">Active</span>
+      </div>
+      <h2>ESP-Rover</h2>
+      <p class="desc">A WiFi-controlled robot car built with an ESP32 and C++. My first ever robotics project, made as part of Google Code Next.  Resources</p>
+      <div class="tags">
+        <span class="tag">C++</span>
+      </div>
+      <div class="card-foot">
+        <span>Updated Aug 16, 2026</span>
+        <span>View spec →</span>
+      </div>
+    </a>
+    <!-- BUILD:projects:end -->
   </main>
 
-  <footer id="site-footer"></footer>
+  <footer id="site-footer">
+    <!-- BUILD:footer:start -->
+    <span>© 2026 Adrian Magallon</span><a href="https://github.com/AdrianMagallon" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://www.linkedin.com/in/adrian-magallon" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    <!-- BUILD:footer:end -->
+  </footer>
 
   <script src="js/config.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/github-api.js"></script>
   <script src="js/catalog.js"></script>
-  <script>
-    document.getElementById("page-title").textContent = CONFIG.siteTitle;
-    document.getElementById("page-tagline").textContent = CONFIG.siteTagline;
-    document.title = CONFIG.siteTitle;
-    const footerLinks = [];
-    if (CONFIG.links.github) footerLinks.push(`<a href="${CONFIG.links.github}" target="_blank" rel="noopener noreferrer">GitHub</a>`);
-    if (CONFIG.links.linkedin) footerLinks.push(`<a href="${CONFIG.links.linkedin}" target="_blank" rel="noopener noreferrer">LinkedIn</a>`);
-    if (CONFIG.links.email) footerLinks.push(`<a href="mailto:${CONFIG.links.email}">Email</a>`);
-    document.getElementById("site-footer").innerHTML =
-      `<span>© ${new Date().getFullYear()} ${CONFIG.ownerName}</span>` + footerLinks.join("");
-  </script>
+  <script src="js/footer.js"></script>
 </body>
 </html>

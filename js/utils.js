@@ -5,3 +5,14 @@ function escapeHtml(str) {
   div.textContent = str;
   return div.innerHTML;
 }
+
+// Same date format scripts/build.mjs uses for the cards it writes into
+// index.html, so nothing visibly changes when the live list replaces them.
+function formatDate(iso) {
+  return new Date(iso).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC"
+  });
+}

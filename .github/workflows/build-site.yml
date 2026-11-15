@@ -1,0 +1,49 @@
+# Rebuilds the parts of the site that search engines read: the project
+# cards in index.html, one page per project under projects/, and
+# sitemap.xml. See scripts/build.mjs for what it does.
+#
+# If anything changed, the result is committed back to main, which makes
+# GitHub Pages publish it.
+name: Build site
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # Once a day, so new repos and README edits show up on their own.
+    - cron: "17 9 * * *"
+  workflow_dispatch: # lets you run it by hand from the Actions tab
+
+permissions:
+  contents: write # needed to commit the rebuilt pages
+
+concurrency:
+  group: build-site
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build pages
+        run: node scripts/build.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit the result if anything changed
+        run: |
+          git add -A index.html sitemap.xml projects
+          if git diff --cached --quiet; then
+            echo "Nothing changed."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Rebuild project pages"
+          git push
