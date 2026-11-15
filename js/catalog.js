@@ -1,6 +1,19 @@
+// index.html already contains the project cards (scripts/build.mjs writes
+// them in), so the page is complete without this file. All this does is
+// swap in a fresh list from GitHub, so a repo you made five minutes ago
+// shows up before the next build runs.
 async function renderCatalog() {
   const grid = document.getElementById("catalog-grid");
-  grid.innerHTML = `<p class="state-msg">Loading portfolio from GitHub…</p>`;
+
+  // Projects that already have a real page under projects/<name>/.
+  const built = new Set(
+    Array.from(grid.querySelectorAll("[data-repo]")).map((el) => el.dataset.repo)
+  );
+  const hasBuiltCards = built.size > 0;
+
+  if (!hasBuiltCards) {
+    grid.innerHTML = `<p class="state-msg">Loading portfolio from GitHub…</p>`;
+  }
 
   try {
     const repos = await fetchRepos(
@@ -10,7 +23,9 @@ async function renderCatalog() {
     );
 
     if (repos.length === 0) {
-      grid.innerHTML = `<p class="state-msg">No repos found. Check the username in js/config.js.</p>`;
+      if (!hasBuiltCards) {
+        grid.innerHTML = `<p class="state-msg">No repos found. Check the username in js/config.js.</p>`;
+      }
       return;
     }
 
@@ -18,7 +33,13 @@ async function renderCatalog() {
     repos.forEach((repo, i) => {
       const card = document.createElement("a");
       card.className = "card";
-      card.href = `project.html?repo=${encodeURIComponent(repo.name)}`;
+      card.dataset.repo = repo.name;
+      // Link to the project's own page when the build has made one. A
+      // brand-new repo doesn't have one yet, so it falls back to the
+      // page that loads its details live.
+      card.href = built.has(repo.name)
+        ? `projects/${encodeURIComponent(repo.name)}/`
+        : `project.html?repo=${encodeURIComponent(repo.name)}`;
 
       const updated = new Date(repo.pushed_at);
       const isActive = (Date.now() - updated.getTime()) < 1000 * 60 * 60 * 24 * 365;
@@ -35,7 +56,7 @@ async function renderCatalog() {
           ${repo.stargazers_count > 0 ? `<span class="tag">★ ${repo.stargazers_count}</span>` : ""}
         </div>
         <div class="card-foot">
-          <span>Updated ${updated.toLocaleDateString()}</span>
+          <span>Updated ${formatDate(repo.pushed_at)}</span>
           <span>View spec →</span>
         </div>
       `;
@@ -43,9 +64,13 @@ async function renderCatalog() {
     });
   } catch (err) {
     console.error(err);
-    grid.innerHTML = `<p class="state-msg error">Couldn't load repos (${escapeHtml(
-      err.message
-    )}). Double-check your GitHub username in js/config.js, or you may have hit the API rate limit — try again in a bit.</p>`;
+    // The cards written into the page are still good — only show an
+    // error if there was nothing there to begin with.
+    if (!hasBuiltCards) {
+      grid.innerHTML = `<p class="state-msg error">Couldn't load repos (${escapeHtml(
+        err.message
+      )}). Double-check your GitHub username in js/config.js, or you may have hit the API rate limit — try again in a bit.</p>`;
+    }
   }
 }
 
